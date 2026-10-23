@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <h1>Mini Expense Tracker</h1>
+      <p class="muted">Track spending by category and month.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Monthly summary dashboard -->
+    <section class="card summary" aria-labelledby="summary-heading">
+      <div class="card-header">
+        <h2 id="summary-heading">Monthly summary</h2>
+        <label class="inline-field">
+          <span>Month</span>
+          <input type="month" id="summary-month">
+        </label>
+      </div>
+      <div id="summary-body" aria-live="polite">
+        <!-- Filled by renderSummary() in app.js -->
+      </div>
+    </section>
+
+    <div class="layout">
+      <!-- Add expense form -->
+      <section class="card" aria-labelledby="form-heading">
+        <h2 id="form-heading">Add expense</h2>
+
+        <div id="form-error" class="banner banner-error" role="alert" hidden></div>
+
+        <form id="expense-form" novalidate>
+          <div class="field">
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" autocomplete="off"
+                   placeholder="e.g. Lunch with team" aria-describedby="title-error">
+            <p class="field-error" id="title-error"></p>
+          </div>
+
+          <div class="field">
+            <label for="amount">Amount</label>
+            <div class="input-prefix">
+              <span aria-hidden="true">₹</span>
+              <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off"
+                     placeholder="0.00" aria-describedby="amount-error">
+            </div>
+            <p class="field-error" id="amount-error"></p>
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category" aria-describedby="category-error">
+              <option value="">Select a category</option>
+              <option value="food">Food</option>
+              <option value="travel">Travel</option>
+              <option value="bills">Bills</option>
+              <option value="other">Other</option>
+            </select>
+            <p class="field-error" id="category-error"></p>
+          </div>
+
+          <div class="field">
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" aria-describedby="date-error">
+            <p class="field-error" id="date-error"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="submit-button">
+            <span class="spinner" aria-hidden="true"></span>
+            <span class="btn-label">Add expense</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Expense list -->
+      <section class="card" aria-labelledby="list-heading">
+        <div class="card-header">
+          <h2 id="list-heading">Expenses</h2>
+          <label class="inline-field">
+            <span>Category</span>
+            <select id="filter-category">
+              <option value="">All</option>
+              <option value="food">Food</option>
+              <option value="travel">Travel</option>
+              <option value="bills">Bills</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="totals" id="list-totals" hidden>
+          <div>
+            <span class="muted">Total for current filter</span>
+            <strong id="total-amount"></strong>
+          </div>
+          <span class="muted" id="total-count"></span>
+        </div>
+
+        <div id="list-body">
+          <!-- Filled by renderList() in app.js -->
+        </div>
+
+        <nav class="pagination" id="pagination" aria-label="Pagination" hidden>
+          <button type="button" class="btn btn-secondary" id="prev-page">Previous</button>
+          <span id="page-info" aria-live="polite"></span>
+          <button type="button" class="btn btn-secondary" id="next-page">Next</button>
+        </nav>
+      </section>
+    </div>
+  </main>
+
+  <!-- Delete confirmation (native dialog handles focus trapping and Escape) -->
+  <dialog id="delete-dialog" aria-labelledby="delete-heading">
+    <form method="dialog">
+      <h2 id="delete-heading">Delete expense?</h2>
+      <p>
+        <strong id="delete-title"></strong>
+        <span class="muted"> · </span>
+        <span id="delete-amount"></span>
+      </p>
+      <p class="muted">This can't be undone.</p>
+      <div class="dialog-actions">
+        <button type="submit" value="cancel" class="btn btn-secondary" autofocus>Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirm-delete">Delete</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Toasts are announced to screen readers -->
+  <div class="toasts" id="toasts" aria-live="polite" role="status"></div>
+</body>
+</html>

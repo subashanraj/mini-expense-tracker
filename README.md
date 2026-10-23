@@ -48,6 +48,12 @@ python -m venv .venv
 Tests run against an isolated `test` schema in the same Supabase project
 (created from the same migration file); `public.expenses` is never touched.
 
+Client-side validation (mirrors the backend rules) is tested with Node's built-in runner:
+
+```bash
+node --test "tests/js/*.test.mjs"
+```
+
 ## Deploy (Render)
 
 `render.yaml` is a Blueprint: Render Dashboard → New → Blueprint → select this

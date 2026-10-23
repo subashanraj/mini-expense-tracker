@@ -1,0 +1,18 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo.
+# Python version comes from .python-version.
+services:
+  - type: web
+    name: mini-expense-tracker
+    runtime: python
+    region: singapore # same region as the Supabase project (ap-southeast-1)
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: APP_TIMEZONE
+        value: Asia/Kolkata
+      - key: DATABASE_URL
+        sync: false # secret: entered in the Render dashboard, never committed
